@@ -1,0 +1,4 @@
+name: HuntTracker
+version: '1.0-SNAPSHOT'
+main: com.btjawa.hunttracker.HuntTracker
+api-version: '1.21'
