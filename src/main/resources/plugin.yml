@@ -2,3 +2,27 @@ name: HuntTracker
 version: '1.0-SNAPSHOT'
 main: com.btjawa.hunttracker.HuntTracker
 api-version: '1.21'
+
+commands:
+  track:
+    description: Track a player.
+    usage: /track <player>
+    permission: hunttracker.track
+
+  hunttracker:
+    description: Manage hunters.
+    usage: /hunttracker <option>
+    permission: hunttracker.admin
+
+permissions:
+  hunttracker.track:
+    description: Allows use of /track
+    default: true
+
+  hunttracker.admin:
+    description: Allows use of /hunttracker
+    default: op
+
+  hunttracker.reset:
+    description: Allows resetting hunt
+    default: op

@@ -32,14 +32,16 @@ object TrackingManager {
             CompassManager.newCompass()
         )
     }
-    fun track(hunter: UUID, target: UUID) {
-        if (!isHunter(hunter)) return
-        val location = Bukkit.getPlayer(target)?.location ?: return
-        trackingMap[hunter] = TrackingEntry(
-            target,
-            location.clone(),
+    fun track(from: UUID, to: UUID) {
+        if (!isHunter(from)) return
+        val hunter = Bukkit.getPlayer(from) ?: return
+        val target = Bukkit.getPlayer(to) ?: return
+        trackingMap[from] = TrackingEntry(
+            to,
+            target.location.clone(),
             System.currentTimeMillis()
         )
+        CompassManager.updateCompass(hunter, target)
     }
     fun allEntries() = trackingMap.entries
     fun isHunter(hunter: UUID) = trackers.any { it == hunter }

@@ -2,6 +2,7 @@ package com.btjawa.hunttracker
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -23,7 +24,7 @@ object CompassManager {
             Component.text("Tracker", NamedTextColor.YELLOW)
         )
         meta.lore(
-            listOf(Component.text("Points to the specified target", NamedTextColor.YELLOW))
+            listOf(Component.text("No track target", NamedTextColor.RED))
         )
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         meta.addEnchant(Enchantment.POWER, 1, true)
@@ -31,8 +32,26 @@ object CompassManager {
         compass.itemMeta = meta
         return compass
     }
-    fun clearCompass(player: Player) {
-        val inventory = player.inventory
+    fun updateCompass(hunter: Player, target: Player) {
+        val compass = hunter.inventory.contents.firstOrNull {
+            it?.itemMeta?.persistentDataContainer?.has(key, PersistentDataType.BYTE) == true
+        } ?: return
+        val meta = compass.itemMeta as CompassMeta
+        val loc = target.location
+        meta.lodestone = loc.clone()
+        meta.displayName(
+            Component.text("Tracker (${target.name})", NamedTextColor.YELLOW)
+        )
+        meta.lore(
+            listOf(
+                Component.text("World: ${target.world.name}", NamedTextColor.AQUA),
+                Component.text("x: ${loc.blockX}, y: ${loc.blockY}, z: ${loc.blockZ}", NamedTextColor.AQUA)
+            )
+        )
+        compass.itemMeta = meta
+    }
+    fun clearCompass(target: Player) {
+        val inventory = target.inventory
         for (item in inventory.contents) {
             if (item?.type != Material.COMPASS) continue
             if (item.itemMeta.persistentDataContainer.has(key, PersistentDataType.BYTE)) {
@@ -40,4 +59,5 @@ object CompassManager {
             }
         }
     }
+    fun getKey() = key
 }

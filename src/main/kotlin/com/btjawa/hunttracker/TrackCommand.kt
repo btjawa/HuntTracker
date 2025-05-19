@@ -33,6 +33,10 @@ object TrackCommand {
                         sender.sendMessage("Player not found.")
                         return@executes 0
                     }
+                    if (target.uniqueId == sender.uniqueId) {
+                        sender.sendMessage("You can not track yourself.")
+                        return@executes 0
+                    }
                     TrackingManager.track(sender.uniqueId, target.uniqueId)
                     sender.sendMessage(
                         Component.text("You're now tracking ${target.name}.", NamedTextColor.YELLOW)

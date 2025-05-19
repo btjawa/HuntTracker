@@ -6,14 +6,12 @@ import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.entity.Player
 
-public object HuntTrackerCommand {
+object HuntTrackerCommand {
     @Suppress("UnstableApiUsage")
     fun createCommand(): LiteralArgumentBuilder<CommandSourceStack> {
         return Commands.literal("hunttracker")
+            .requires { it.sender.hasPermission("hunttracker.admin") }
             .then(Commands.literal("addhunter")
                 .then(Commands.argument("target", ArgumentTypes.player())
                     .executes { ctx ->
